@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html ng-app="musicApp">
+    <head>
+        <title>Music Player</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="lib/css/font-awesome.min.css">
+        <link href="lib/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="music.css">
+        <script src="lib/js/jquery.min.js"></script>
+        <script src="lib/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="lib/js/angular.min.js"></script>
+        <script type="text/javascript" src="lib/js/angular.audio.js"></script>
+        <script type="text/javascript" src="music.js"></script>
+    </head>
+    <body ng-controller="musicController">
+        <header class="heading">
+            <i class="fa fa-list" ng-click="menuToggle()" id="togglebutton"></i>
+            <input type="text" ng-model="searchSong" placeholder="Search Song"  class="search-bar">
+        </header>
+        <div class="menu-bar">
+            <div class="menu-top">
+                
+            </div>
+            <ul class="nav">
+                <li><a href="#allsong" ng-click="viewItem(all)" ng-init="all= '#allsong'">All Songs</a></li>
+                <li><a href="#thumbup" ng-click="viewItem(up)" ng-init="up= '#thumbup'">Thumbs Up</a></li>
+                <li><a href="#thumbdown" ng-click="viewItem(down)" ng-init="down= '#thumbdown'">Thumbs Down</a></li> 
+                <li><a href="#about" ng-click="viewItem(abt)" ng-init="abt= '#about'">About</a></li> 
+            </ul>
+        </div>
+        <div class="row">
+            <div class="col-md-5" id="viewitem">
+                <div id="allsong" class="panel-collapse collapse">
+                    <ul>
+                        <li ng-repeat="song in songs|filter:searchSong track by $index">
+                            <div class="song-name" ng-click="playSound(song.link,$index)">{{song.name}}</div>
+                        </li>
+                    </ul>
+                </div> 
+                  <div id="thumbup" class="panel-collapse collapse">    
+                    <ul>
+                        <li ng-repeat="song in songs|filter:searchSong|filter:{thumbup:true} track by $index">
+                            <div class="song-name" ng-click="playSound(song.link,$index)">{{song.name}}</div>
+                        </li>
+                    </ul>
+                </div> 
+                  <div id="thumbdown" class="panel-collapse collapse">    
+                    <ul>
+                        <li ng-repeat="song in songs|filter:searchSong|filter:{thumbdown:true} track by $index">
+                            <div class="song-name" ng-click="playSound(song.link,$index)">{{song.name}}</div>
+                        </li>
+                    </ul>
+                </div> 
+                <div id="about" class="panel-collapse collapse">    
+                    
+                </div> 
+            </div>
+            <div class="col-md-7" id="mainplayer">
+                <div class="player-top">
+                    <img src="{{p_albumart}}" class="albumart-small col-xs-2">
+                        <h4><b>{{p_name}}</b></h4>
+                        <p>{{p_singer}}</p>
+                </div>
+                <div class="player-albumart"  ng-style="myStyle">
+                    <img src="{{p_albumart}}" class="albumart-big">
+                </div>
+                <div class="player-controls">
+                    <i class="fa fa-thumbs-o-up thumb-{{p_thumbup}}" ng-click="thumbsUp()" id="thumbup"></i>
+                    <i class="fa fa-step-backward" ng-click="previousSong()"></i>                     
+                    <i id="player" class="fa fa-pause-circle" ng-click="toggleSong()"></i> 
+                    <i class="fa fa-step-forward" ng-click="nextSong()"></i>                     
+                    <i class="fa fa-thumbs-o-down thumb-{{p_thumbdown}}" ng-click="thumbsDown()" id="thumbdown"></i>
+                </div>
+            </div>
+        </div>
+        <section class="mainview">
+                <ul>
+                    <li ng-repeat="song in songs track by $index" class="main-li col-md-4">
+                        <div class="main-albumart">
+                            <img src="{{song.albumart}}" class="main-image">
+                        </div>
+                        <div class="main-details">
+                            <h4>{{song.name}}</h4>
+                            <p>{{song.singer}}</p>
+                            <i class="fa fa-play-circle mplayer" ng-click="mplaySong(song.link,$index)" id="song-{{$index}}"></i>
+                        </div>
+                    </li>
+                </ul>
+        </section> 
+        </body>
+</html>
